@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ügyakta: Huang × Huang</title>
+  <meta name="description" content="Nyomozás hat nyelven: Jensen Huang, Alice Huang, a Megaspeed és mit jelent mindez az Nvidiának, a videókártyáknak és a világgazdaságnak. Élő 3D helyszín a Helios WebGPU-motorral.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><path d='M6 22 L16 6 L26 22 Z' fill='none' stroke='%2376b900' stroke-width='3'/><circle cx='16' cy='17' r='3' fill='%23ff3b2f'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/case.css">
+</head>
+<body class="loading">
+
+  <!-- élő 3D helyszín: Helios (Rust + WebGPU) -->
+  <div id="stage" aria-hidden="true"><canvas id="helios-canvas" tabindex="0"></canvas></div>
+  <div id="engine-status" hidden></div>
+  <div class="fx-scan"></div><div class="fx-grain"></div>
+
+  <div class="hud" aria-hidden="true">
+    <i></i><i></i><i></i><i></i>
+    <div class="tl"><span class="rec">REC</span><span>HELIOS · HELYSZÍNI KAMERA</span><span class="shot-name" id="hud-shot">Áttekintő felvétel</span></div>
+    <div class="tr">ÜGYSZÁM NV-2026-1108<br><span id="hud-time"></span></div>
+    <div class="bl">ÉLŐ WEBGPU-RENDER · LUMEN GI · VSM ÁRNYÉKOK</div>
+    <div class="br" id="hud-gpu"></div>
+  </div>
+
+  <div id="veil">
+    <div class="veil-box">
+      <h2>Ügyakta <b>NV-2026-1108</b></h2>
+      <div class="veil-log" id="veil-log"></div>
+      <div class="veil-bar"><span id="veil-bar"></span></div>
+      <div class="small">A háttérben futó 3D helyszínt a Helios grafikus motor építi fel valós időben a böngésződben.</div>
+      <button class="veil-skip" id="veil-skip">Akta megnyitása most →</button>
+    </div>
+  </div>
+
+  <nav class="rail" aria-label="Fejezetek"></nav>
+  <button class="explore-btn" id="explore-btn" hidden>⌖ Helyszínbejárás</button>
+  <div class="explore-help">Húzd az egeret a nézelődéshez · W A S D / Q E repülés · görgő: sebesség · Esc: vissza</div>
+
+  <main>
+    <!-- 0 · NYITÓLAP -->
+    <header class="hero" id="nyito" data-shot="intro" data-rail="Akta">
+      <div class="caseno"><span>ÜGYSZÁM <b>NV-2026-1108</b></span><span>MEGNYITVA <b>2026. 11. 10.</b></span><span>NYELVEK <b>HU · EN · 中文 · 日本語 · DE · FR</b></span></div>
+      <h1><span class="row">Huang</span><span class="row"><span class="x">×</span> Huang</span></h1>
+      <p class="sub"><span id="typed" class="typed" data-text="A világ egyik legértékesebb cégének vezére viszonyt ismert be. Az amerikai hírszerzés szerint a nő kínai ügynök volt. Ez a nyomozás azt keresi, mi igaz ebből, és mit jelent az Nvidiának, a videókártyáknak és a világgazdaságnak."></span></p>
+      <div class="quartet" aria-label="A 444 címének négy kulcsszava"><span>Pénz</span><span>Szex</span><span>AI</span><span>Kína</span></div>
+      <div class="stamp">Szigorúan bizalmas</div>
+      <div class="scroll-cue">GÖRGESS A NYOMOZÁSHOZ</div>
+    </header>
+
+    <!-- 1 · AZ ÜGY RÖVIDEN -->
+    <section class="chapter left" id="ugy" data-shot="case" data-rail="Az ügy">
+      <article class="file wide reveal" data-tab="01 · Az ügy 60 másodpercben">
+        <span class="corner">Bizonyítékok</span>
+        <p class="kicker">Mi történt?</p>
+        <h2>Egy levél, egy kémgyanú, <em>4,3%</em> zuhanás</h2>
+        <p class="lede">2026. november 8-án, vasárnap Jensen Huang, az Nvidia alapító-vezérigazgatója körlevelet küldött a dolgozóknak: <b>„Hűtlen voltam a feleségemhez.”</b> A levélben nem nevezte meg a nőt, de a sajtó szerint <b>Alice Huangról</b> (Huang Le) van szó. Ő a szingapúri Megaspeed korábbi vezetője, és az amerikai hírszerzés értékelése szerint a kínai Állambiztonsági Minisztérium (MSS) beszervezett embere. Mindez egyelőre <i>névtelen forrásokon alapuló állítás</i>. Vádat senki ellen nem emeltek.</p>
+        <div class="brief" id="brief"></div>
+      </article>
+    </section>
+
+    <!-- 2 · IDŐVONAL -->
+    <section class="chapter right tall" id="idovonal" data-shot="timeline" data-rail="Idővonal">
+      <article class="file wide" data-tab="02 · Idővonal">
+        <span class="corner">2023 → 2026. nov.</span>
+        <p class="kicker">Rekonstrukció</p>
+        <h2>Hogyan jutottunk <em>idáig?</em></h2>
+        <p class="muted">A címke jelzi, mi igazolt (hivatalos nyilatkozat, dokumentum), mi névtelen forrásokra épülő állítás, és mi elemzés.</p>
+        <div class="timeline" id="timeline"></div>
+      </article>
+    </section>
+
+    <!-- 3 · NYOMOZÓTÁBLA -->
+    <section class="chapter center tall" id="tabla" data-shot="suspects" data-rail="Szereplők">
+      <article class="file xwide reveal" data-tab="03 · A nyomozótábla">
+        <span class="corner">Kattints egy fotóra</span>
+        <p class="kicker">Szereplők és kapcsolatok</p>
+        <h2>Ki kivel, <em>és miért?</em></h2>
+        <p class="muted">Piros fonal: gyanú vagy vizsgálat. Zöld fonal: üzleti vagy hivatalos kapcsolat. Szaggatott vonal: vitatott vagy közvetett kapcsolat.</p>
+        <div class="board-wrap">
+          <div class="board" id="board"><svg id="board-svg" aria-hidden="true"></svg></div>
+          <aside class="dossier" id="dossier" aria-live="polite"></aside>
+        </div>
+      </article>
+    </section>
+
+    <!-- 4 · KÖVESD A PÉNZT -->
+    <section class="chapter left tall" id="penz" data-shot="money" data-rail="A pénz">
+      <article class="file wide reveal" data-tab="04 · Kövesd a pénzt">
+        <span class="corner">Tőzsde · chipek · Kína</span>
+        <p class="kicker">Számok</p>
+        <h2>Mennyibe <em>került</em> egy levél?</h2>
+        <div class="stats" id="stats"></div>
+        <div class="chart-box" id="chart"></div>
+        <div class="chart-box" id="peers"></div>
+      </article>
+    </section>
+
+    <!-- 5 · HAT NYELV -->
+    <section class="chapter right tall" id="vilag" data-shot="world" data-rail="Hat nyelv">
+      <article class="file xwide reveal" data-tab="05 · Hat nyelv, hat történet">
+        <span class="corner">Sajtófigyelés</span>
+        <p class="kicker">Ugyanaz az ügy, más szemüveggel</p>
+        <h2>Mit látnak <em>a világ</em> különböző pontjain?</h2>
+        <div class="tabs" id="lang-tabs" role="tablist" aria-label="Nyelvek"></div>
+        <div id="lang-panel"></div>
+      </article>
+    </section>
+
+    <!-- 6 · A NÉGY TÖRÉSVONAL -->
+    <section class="chapter left tall" id="baj" data-shot="faults" data-rail="Mi a baj?">
+      <article class="file xwide reveal" data-tab="06 · Mi a baj vele?">
+        <span class="corner">444: „ezeken reccsenhet meg”</span>
+        <p class="kicker">A négy törésvonal</p>
+        <h2>Pénz, szex, AI, Kína: <em>hol reccsenhet?</em></h2>
+        <p class="lede">A magánéleti botrány önmagában nem rendítené meg a világ egyik legértékesebb cégét. A baj az, hogy négy kockázat egyszerre ér össze egyetlen ember körül.</p>
+        <div class="faults" id="faults"></div>
+      </article>
+    </section>
+
+    <!-- 7 · VIDEÓKÁRTYÁK -->
+    <section class="chapter right tall" id="gpu" data-shot="gpu" data-rail="GPU-k">
+      <article class="file wide reveal" data-tab="07 · Mi lesz a videókártyákkal?">
+        <span class="corner">GeForce · adatközpont · Kína</span>
+        <p class="kicker">Hatáselemzés</p>
+        <h2>Drágább lesz <em>a GeForce?</em></h2>
+        <p class="lede">Röviden: <b>közvetlenül nem.</b> Egyetlen vizsgált forrás sem köti a botrányt a GeForce-árakhoz. A kártyák már előtte is drágák és szűkösek voltak a memóriahiány és az AI-prioritás miatt. A botrány közvetett csatornákon hathat, és ezek közül néhány hónapok vagy évek múlva jelentkezhet.</p>
+        <div class="impacts" id="impacts"></div>
+      </article>
+    </section>
+
+    <!-- 8 · FORGATÓKÖNYVEK -->
+    <section class="chapter left tall" id="jovo" data-shot="future" data-rail="Jövő">
+      <article class="file wide reveal" data-tab="08 · Az Nvidia jövője">
+        <span class="corner">Forgatókönyvek</span>
+        <p class="kicker">Mi jöhet ezután?</p>
+        <h2>Három <em>lehetséges</em> folytatás</h2>
+        <p class="muted">Válassz egy forgatókönyvet. A százalékok a saját, források alapján kialakított becslésünk, nem piaci konszenzus.</p>
+        <div class="scen-pick" id="scen-pick"></div>
+        <div id="scen-body"></div>
+        <p class="disclaim">Fontos dátumok: nov. 11. (a képviselőházi levél válaszhatárideje), nov. 17. (Q3 gyorsjelentés), nov. 18. (zárt ajtós képviselőházi meghallgatás), nov. 19–20. körül (lehetséges Trump–Hszi találkozó, APEC).</p>
+      </article>
+    </section>
+
+    <!-- 9 · TÉNY VAGY ÁLLÍTÁS -->
+    <section class="chapter right tall" id="tenyek" data-shot="ledger" data-rail="Tény/állítás">
+      <article class="file wide reveal" data-tab="09 · Tény vagy állítás?">
+        <span class="corner">Ellenőrzési napló</span>
+        <p class="kicker">Ne keverjük össze</p>
+        <h2>Mit <em>tudunk</em>, és mit csak állítanak?</h2>
+        <div class="filters" id="filters"></div>
+        <table class="ledger" id="ledger"><tbody></tbody></table>
+        <p class="disclaim">Ellentmondások a források között: a nő neve (Huang Le vagy Huang Li), az elveszett piaci érték (190–270 milliárd dollár), a Megaspeed vásárlásainak összege (4,6–7,5 milliárd dollár), és az, hogy mikor kapott Trump figyelmeztetést (kb. egy éve, vagy 2026 májusa előtt).</p>
+      </article>
+    </section>
+
+    <!-- 10 · FORRÁSOK -->
+    <section class="chapter center tall" id="forrasok" data-shot="sources" data-rail="Források">
+      <article class="file xwide reveal" data-tab="10 · Források">
+        <span class="corner">6 nyelv</span>
+        <p class="kicker">Honnan tudjuk?</p>
+        <h2>A nyomozás <em>forrásai</em></h2>
+        <p class="muted">A NYT, FT, Bloomberg és The Information eredeti cikkei fizetősek. Az ezekből származó állításokat a forrásként megnevezett, nyíltan elérhető átvételek alapján idézzük.</p>
+        <div class="sources" id="sources"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="end">
+    <b>ÜGYAKTA NV-2026-1108</b> · összeállítva 2026. november 10-én, nyilvános források alapján · nem jogi megállapítás: a gyanúsítások bizonyítatlanok, vádemelés nem történt<br>
+    A háttérben futó 3D helyszínt a <b>Helios</b> (Rust + WebGPU) grafikus motor rendereli valós időben · Az NVIDIA név az érintett céget jelöli, az oldal független, nem az Nvidia kiadványa
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
