@@ -142,7 +142,8 @@ function renderChart() {
     const w = (Math.abs(p.v) / maxAbs) * (peerW - mid - 70);
     const yy = 10 + i * 34;
     const neg = p.v < 0;
-    return `<text x="${mid - 12}" y="${yy + 17}" fill="${neg ? "#ff3b2f" : "#e8ede2"}" font-size="13" text-anchor="end" font-family="IBM Plex Mono">${esc(p.n)}</text>
+    // Negatív értéknél a sáv balra nő, ezért a név a tengely jobb oldalára kerül, hogy ne takarja ki.
+    return `<text x="${neg ? mid + 12 : mid - 12}" y="${yy + 17}" fill="${neg ? "#ff3b2f" : "#e8ede2"}" font-size="13" text-anchor="${neg ? "start" : "end"}" font-family="IBM Plex Mono">${esc(p.n)}</text>
       <rect x="${neg ? mid - w * 0 : mid}" y="${yy + 4}" width="0" height="18" fill="${neg ? "#ff3b2f" : "#76b900"}" data-w="${w}" ${neg ? `transform="translate(${-w},0)"` : ""} opacity="${neg ? 1 : 0.85}"/>
       <text x="${neg ? mid - w - 8 : mid + w + 8}" y="${yy + 18}" fill="${neg ? "#ff3b2f" : "#a4e400"}" font-size="12.5" text-anchor="${neg ? "end" : "start"}" font-family="IBM Plex Mono" font-weight="600">${p.v > 0 ? "+" : ""}${p.v.toLocaleString("hu-HU")}%</text>`;
   }).join("");
@@ -360,7 +361,9 @@ async function startEngine() {
     m.heliosLookAt(...c);
     // A Helios progresszívan fordítja a shadereket: az első képig várunk, közben a motor saját
     // állapotsorát (heliosBusy) mutatjuk, hogy a fátyol ne fekete vászonra húzódjon fel.
-    for (let i = 0, last = ""; i < 600 && !(m.heliosFrames?.() > 0); i++) {
+    // Rejtett lapon nincs képkocka (rAF áll), ott nem várunk; legfeljebb 60 s.
+    const t0 = performance.now();
+    for (let last = ""; performance.now() - t0 < 60000 && !document.hidden && !(m.heliosFrames?.() > 0);) {
       const busy = m.heliosBusy?.() || "";
       if (busy && busy.replace(/[\d.]+ s/, "") !== last) { last = busy.replace(/[\d.]+ s/, ""); log("GPU: " + busy); }
       await new Promise((r) => setTimeout(r, 100));
