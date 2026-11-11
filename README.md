@@ -24,6 +24,6 @@ WebGPU-képes böngésző kell hozzá (Chrome vagy Edge 113+). WebGPU nélkül a
 | `js/main.js` | motorindítás, görgetésre mozgó kamera, nyomozótábla, fülek, szűrők, diagramok |
 | `js/scene.js` | a 3D helyszín: chip, Peking, Megaspeed-rack, pénz, Fehér Ház, üveggömb, piros fonalak, fények, köd |
 | `js/data.js` | minden tartalom: idővonal, szereplők, kapcsolatok, számok, nyelvi nézőpontok, forgatókönyvek, források |
-| `pkg/` | a Helios WASM-build (`d:\AI\Unreal\web\pkg` másolata) |
+| `pkg/` | a Helios WASM-build (`d:\AI\Unreal\web\pkg` másolata, a `snippets/` mappával együtt: ebben van a sütést végző Web Worker) |
 
-A Helios frissítése után a `pkg/` mappát újra át kell másolni.
+A Helios frissítése után a teljes `pkg/` mappát (a `snippets/`-szel együtt) újra át kell másolni, és meg kell nézni, hogy a `js/scene.js` által használt editor-API (`heliosEditorState`, `heliosEditorApply`) változott-e. A 2026. november 11-i Helios-verzióban az állapot actor-hierarchiát ad vissza (`actors: { id, name, parent, flags }`), a galériát ezért `actor_visibility` op rejti el. A töltőképernyő a `heliosFrames()` első képkockájáig vár, és közben a `heliosBusy()` shaderfordítási állapotát írja ki.

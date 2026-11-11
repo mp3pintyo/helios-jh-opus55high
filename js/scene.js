@@ -40,11 +40,13 @@ export async function buildCrimeScene(H, onStep = () => {}) {
   const yieldFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
   const st = JSON.parse(H.heliosEditorState());
 
-  // 1. A galéria kiürítése: minden példány a padlón kívül rejtve, a fények törölve.
-  const n = st.instances.mesh.length;
-  const hide = [];
-  for (let i = 1; i < n; i++) hide.push(i);
-  apply({ op: "visibility", instances: hide, visible: false });
+  // 1. A galéria kiürítése: minden legfelső szintű actor a padlón (Courtyard) kívül rejtve
+  //    (a gyerekeikkel együtt), a fények törölve. Az állapot actorjai oszloposan jönnek:
+  //    { id: [...], name: [...], parent: [...], flags: [...] }.
+  const A = st.actors;
+  const floor = A.name.indexOf("Courtyard");
+  const hide = A.id.filter((id, i) => A.parent[i] === -1 && i !== (floor < 0 ? 0 : floor));
+  apply({ op: "actor_visibility", actors: hide, visible: false });
   apply({ op: "delete", lights: st.lights.map((l) => l.index) });
   onStep(0.15);
   await yieldFrame();

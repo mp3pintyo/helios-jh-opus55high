@@ -358,6 +358,13 @@ async function startEngine() {
     engine = m;
     const c = SHOTS.intro;
     m.heliosLookAt(...c);
+    // A Helios progresszívan fordítja a shadereket: az első képig várunk, közben a motor saját
+    // állapotsorát (heliosBusy) mutatjuk, hogy a fátyol ne fekete vászonra húzódjon fel.
+    for (let i = 0, last = ""; i < 600 && !(m.heliosFrames?.() > 0); i++) {
+      const busy = m.heliosBusy?.() || "";
+      if (busy && busy.replace(/[\d.]+ s/, "") !== last) { last = busy.replace(/[\d.]+ s/, ""); log("GPU: " + busy); }
+      await new Promise((r) => setTimeout(r, 100));
+    }
     log("piros fonalak kifeszítve · fények be · kamera élesítve", 1);
     window.__sceneReady = true;
     $("#explore-btn").hidden = false;
